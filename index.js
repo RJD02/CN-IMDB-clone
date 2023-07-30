@@ -39,33 +39,97 @@ var searchTerm = document.querySelector("#search");
 var omdbURL = "https://www.omdbapi.com/";
 var API_KEY = "9e0f94a9";
 var favMovies = [];
+var favListFromLocalStorage = localStorage.getItem("favList");
+if (favListFromLocalStorage != null && favListFromLocalStorage != undefined)
+    favMovies = JSON.parse(favListFromLocalStorage);
 var currMovies = [];
-searchTerm.addEventListener("keyup", function () { return __awaiter(_this, void 0, void 0, function () {
+var id = 1;
+window.addEventListener("beforeunload", function () {
+    localStorage.setItem("favList", JSON.stringify(favMovies));
+});
+searchTerm.addEventListener("input", function () { return __awaiter(_this, void 0, void 0, function () {
     var searchText;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 searchText = searchTerm.value;
-                if (searchText === "" || !searchText) {
-                    currMovies = [];
+                if (!searchText) {
                     console.log("Empty");
                     return [2 /*return*/];
                 }
+                if (searchText[searchText.length - 1] != " ")
+                    deleteAllMovies();
                 return [4 /*yield*/, fetchMovies(searchText)];
             case 1:
                 currMovies = (_a.sent()) || [];
+                currMovies = currMovies.filter(function (m) { return m.Poster != "N/A"; });
                 currMovies.forEach(function (e) { return addMovies(e); });
                 console.log("Current movies", currMovies);
                 return [2 /*return*/];
         }
     });
 }); });
+var deleteAllMovies = function () { return __awaiter(_this, void 0, void 0, function () {
+    var movieDivs;
+    return __generator(this, function (_a) {
+        console.log("Deleting all movies");
+        movieDivs = document.querySelectorAll(".movie");
+        if (movieDivs) {
+            movieDivs.forEach(function (e) { return e.remove(); });
+        }
+        return [2 /*return*/];
+    });
+}); };
 var addMovies = function (movie) {
+    // check if this movie of this id already exists
+    var doesMovieDivExists = document.querySelector("#movie-".concat(movie.imdbID));
+    if (doesMovieDivExists)
+        return;
+    // const url = new URL(omdbURL)
+    // url.searchParams.set('i', movie.imdbID)
+    // url.searchParams.set('apikey', API_KEY)
+    // try {
+    // const response = await fetch(url);
+    // const data = await response.json();
+    // } catch(e) {
+    //   console.log(e);
+    //   return;
+    // }
     var gridDiv = document.querySelector(".grid");
     var colDiv = document.createElement("div");
     colDiv.classList.add("movie");
-    colDiv.innerHTML = "\n          <div class=\"group border-zinc-700 border-solid border rounded-md\">\n          <div class=\"card rounded\">\n            <div class=\"flex text-slate-300 flex-col\">\n              <div class=\"img-wrap relative\">\n                <img\n                  src=\"".concat(movie.Poster, "\"\n                  alt=\"\"\n                  class=\"hover:blur-sm peer-hover:blur-sm\"\n                />\n                <a class=\"\" href=\"\">\n                  <i\n                    class=\"fa-2xl fa-solid fa-info text-white absolute left-1/2 top-1/2 invisible group-hover:visible\"\n                  ></i>\n                </a>\n                <p\n                  class=\"rated px-1 absolute bottom-2 left-2 bg-green-200 text-black rounded-md text-sm font-mono\"\n                >\n                  ").concat(movie.Year, "\n                </p>\n              </div>\n            </div>\n          </div>\n          <div\n            class=\"card-content px-1.5 bg-zinc-700 text-slate-200 group-hover:text-white\"\n          >\n            <h4 class=\"text-lg font-semibold\">").concat(movie.Title, "</h4>\n            <div class=\"details flex justify-between items-center\">\n              <span>").concat(movie.Type, "</span>\n              <span\n                class=\"dot w-1 h-1 rounded bg-stone-400 inline-block mx-1.5 mt-0.5\"\n              ></span>\n              <span>").concat(movie.imdbID, "</span>\n              <span\n                class=\"dot w-1 h-1 rounded bg-stone-400 inline-block mx-1.5 mt-0.5\"\n              ></span>\n              <span>115m</span>\n            </div>\n          </div>\n        </div>\n  ");
+    colDiv.id = "movie-".concat(movie.imdbID);
+    colDiv.classList.add("bg-zinc-700");
+    colDiv.classList.add("group");
+    colDiv.innerHTML = "\n          \n            <div class=\"max-h-full relative flex flex-1\">\n              <img\n                src=".concat(movie.Poster, "\n                alt=\"\"\n                class=\"group-hover:blur-md\"\n              />\n              \n                <i\n                  class=\"cursor-pointer fa-2xl fa-regular fa-heart text-white absolute left-1/2 top-1/2 invisible group-hover:visible\"\n                ></i>\n              \n                <i\n                  class=\"cursor-pointer fa-2xl fa-solid fa-heart text-white absolute left-1/2 top-1/2 hidden invisible group-hover:visible\"\n                ></i>\n              <p\n                class=\"rated px-1 absolute bottom-2 left-2 bg-green-200 text-black rounded-md text-sm font-mono group-hover:blur-sm\"\n              >\n                PG-13\n              </p>\n            </div>\n            <div\n              class=\"flex flex-col text-slate-200 group-hover:text-white px-1\"\n            >\n              <h3 class=\"mb-1 cursor-pointer text-lg font-semibold text-center\">").concat(movie.Title.length > 15
+        ? movie.Title.substring(0, 15) + "..."
+        : movie.Title, "</h3>\n              <div class=\"flex justify-evenly items-center\">\n                <span>").concat(movie.Type, "</span>\n                <span\n                  class=\"dot w-1 h-1 rounded bg-stone-400 inline-block mx-1.5 mt-0.5\"\n                ></span>\n                <span>").concat(movie.Year.substring(0, 4), "</span>\n                \n              </div>\n            </div>\n          \n  ").trim();
     gridDiv === null || gridDiv === void 0 ? void 0 : gridDiv.append(colDiv);
+    var movieTitle = document.querySelector("#movie-".concat(movie.imdbID, " h3"));
+    var lightIconRegular = document.querySelector("#movie-".concat(movie.imdbID, " .fa-regular"));
+    var lightIconSolid = document.querySelector("#movie-".concat(movie.imdbID, " .fa-solid"));
+    // show liked icon if movie is in favMovies list
+    if (favMovies.includes(movie.imdbID)) {
+        lightIconRegular === null || lightIconRegular === void 0 ? void 0 : lightIconRegular.classList.add("hidden");
+        lightIconSolid === null || lightIconSolid === void 0 ? void 0 : lightIconSolid.classList.remove("hidden");
+    }
+    movieTitle === null || movieTitle === void 0 ? void 0 : movieTitle.addEventListener("click", function () {
+        localStorage.setItem("movieId", movie.imdbID);
+        localStorage.setItem("favList", JSON.stringify(favMovies));
+        window.location.assign("/moviePage/movie.html");
+    });
+    lightIconRegular === null || lightIconRegular === void 0 ? void 0 : lightIconRegular.addEventListener("click", function () {
+        // put to fav list
+        favMovies.push(movie.imdbID);
+        lightIconRegular.classList.add("hidden");
+        lightIconSolid === null || lightIconSolid === void 0 ? void 0 : lightIconSolid.classList.remove("hidden");
+    });
+    lightIconSolid === null || lightIconSolid === void 0 ? void 0 : lightIconSolid.addEventListener("click", function () {
+        // remove from fav list
+        favMovies = favMovies.filter(function (m) { return m != movie.imdbID; });
+        lightIconRegular === null || lightIconRegular === void 0 ? void 0 : lightIconRegular.classList.remove("hidden");
+        lightIconSolid.classList.add("hidden");
+    });
 };
 var fetchMovies = function (searchText) { return __awaiter(_this, void 0, void 0, function () {
     var url, response, data, e_1;

@@ -3,8 +3,12 @@ const searchTerm = <HTMLInputElement>document.querySelector("#search");
 const omdbURL = "https://www.omdbapi.com/";
 const API_KEY = "9e0f94a9";
 
-let favMovies = [];
-let currMovies = [];
+let favMovies: string[] = [];
+const favListFromLocalStorage = localStorage.getItem("favList");
+if (favListFromLocalStorage != null && favListFromLocalStorage != undefined)
+  favMovies = JSON.parse(favListFromLocalStorage);
+let currMovies: OMDBResponseSearchObject[] = [];
+let id = 1;
 
 interface OMDBResponseSearchObject {
   Title: string;
@@ -20,64 +24,127 @@ interface OMDBResponse {
   totalResults: string | null;
 }
 
-searchTerm.addEventListener("keyup", async () => {
+window.addEventListener("beforeunload", () => {
+  localStorage.setItem("favList", JSON.stringify(favMovies));
+});
+
+searchTerm.addEventListener("input", async () => {
   let searchText = searchTerm.value;
-  if (searchText === "" || !searchText) {
-    currMovies = [];
+  if (!searchText) {
     console.log("Empty");
     return;
   }
+
+  if (searchText[searchText.length - 1] != " ") deleteAllMovies();
   currMovies = (await fetchMovies(searchText)) || [];
+  currMovies = currMovies.filter((m) => m.Poster != "N/A");
   currMovies.forEach((e) => addMovies(e));
   console.log("Current movies", currMovies);
 });
 
+const deleteAllMovies = async () => {
+  console.log("Deleting all movies");
+  const movieDivs = document.querySelectorAll(".movie");
+  if (movieDivs) {
+    movieDivs.forEach((e) => e.remove());
+  }
+};
+
 const addMovies = (movie: OMDBResponseSearchObject) => {
+  // check if this movie of this id already exists
+  const doesMovieDivExists = document.querySelector(`#movie-${movie.imdbID}`);
+  if (doesMovieDivExists) return;
+  // const url = new URL(omdbURL)
+  // url.searchParams.set('i', movie.imdbID)
+  // url.searchParams.set('apikey', API_KEY)
+  // try {
+  // const response = await fetch(url);
+  // const data = await response.json();
+  // } catch(e) {
+  //   console.log(e);
+  //   return;
+  // }
   const gridDiv = document.querySelector(".grid");
   const colDiv = document.createElement("div");
   colDiv.classList.add("movie");
+  colDiv.id = `movie-${movie.imdbID}`;
+  colDiv.classList.add("bg-zinc-700");
+  colDiv.classList.add("group");
+
   colDiv.innerHTML = `
-          <div class="group border-zinc-700 border-solid border rounded-md">
-          <div class="card rounded">
-            <div class="flex text-slate-300 flex-col">
-              <div class="img-wrap relative">
-                <img
-                  src="${movie.Poster}"
-                  alt=""
-                  class="hover:blur-sm peer-hover:blur-sm"
-                />
-                <a class="" href="">
-                  <i
-                    class="fa-2xl fa-solid fa-info text-white absolute left-1/2 top-1/2 invisible group-hover:visible"
-                  ></i>
-                </a>
-                <p
-                  class="rated px-1 absolute bottom-2 left-2 bg-green-200 text-black rounded-md text-sm font-mono"
-                >
-                  ${movie.Year}
-                </p>
+          
+            <div class="max-h-full relative flex flex-1">
+              <img
+                src=${movie.Poster}
+                alt=""
+                class="group-hover:blur-md"
+              />
+              
+                <i
+                  class="cursor-pointer fa-2xl fa-regular fa-heart text-white absolute left-1/2 top-1/2 invisible group-hover:visible"
+                ></i>
+              
+                <i
+                  class="cursor-pointer fa-2xl fa-solid fa-heart text-white absolute left-1/2 top-1/2 hidden invisible group-hover:visible"
+                ></i>
+              <p
+                class="rated px-1 absolute bottom-2 left-2 bg-green-200 text-black rounded-md text-sm font-mono group-hover:blur-sm"
+              >
+                PG-13
+              </p>
+            </div>
+            <div
+              class="flex flex-col text-slate-200 group-hover:text-white px-1"
+            >
+              <h3 class="mb-1 cursor-pointer text-lg font-semibold text-center">${
+                movie.Title.length > 15
+                  ? movie.Title.substring(0, 15) + "..."
+                  : movie.Title
+              }</h3>
+              <div class="flex justify-evenly items-center">
+                <span>${movie.Type}</span>
+                <span
+                  class="dot w-1 h-1 rounded bg-stone-400 inline-block mx-1.5 mt-0.5"
+                ></span>
+                <span>${movie.Year.substring(0, 4)}</span>
+                
               </div>
             </div>
-          </div>
-          <div
-            class="card-content px-1.5 bg-zinc-700 text-slate-200 group-hover:text-white"
-          >
-            <h4 class="text-lg font-semibold">${movie.Title}</h4>
-            <div class="details flex justify-between items-center">
-              <span>${movie.Type}</span>
-              <span
-                class="dot w-1 h-1 rounded bg-stone-400 inline-block mx-1.5 mt-0.5"
-              ></span>
-              <span>${movie.imdbID}</span>
-              <span
-                class="dot w-1 h-1 rounded bg-stone-400 inline-block mx-1.5 mt-0.5"
-              ></span>
-              <span>115m</span>
-            </div>
-          </div>
-        </div>
-  `;
+          
+  `.trim();
   gridDiv?.append(colDiv);
+
+  const movieTitle = document.querySelector(`#movie-${movie.imdbID} h3`);
+  const lightIconRegular = document.querySelector(
+    `#movie-${movie.imdbID} .fa-regular`
+  );
+  const lightIconSolid = document.querySelector(
+    `#movie-${movie.imdbID} .fa-solid`
+  );
+  // show liked icon if movie is in favMovies list
+  if (favMovies.includes(movie.imdbID)) {
+    lightIconRegular?.classList.add("hidden");
+    lightIconSolid?.classList.remove("hidden");
+  }
+  movieTitle?.addEventListener("click", () => {
+    localStorage.setItem("movieId", movie.imdbID);
+    localStorage.setItem("favList", JSON.stringify(favMovies));
+    window.location.assign("/moviePage/movie.html");
+  });
+
+  lightIconRegular?.addEventListener("click", () => {
+    // put to fav list
+    favMovies.push(movie.imdbID);
+    lightIconRegular.classList.add("hidden");
+    lightIconSolid?.classList.remove("hidden");
+  });
+
+  lightIconSolid?.addEventListener("click", () => {
+    // remove from fav list
+    favMovies = favMovies.filter((m) => m != movie.imdbID);
+    lightIconRegular?.classList.remove("hidden");
+    lightIconSolid.classList.add("hidden");
+  });
 };
 
 const fetchMovies = async (searchText: string) => {
