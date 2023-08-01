@@ -118,7 +118,7 @@ const addMovies = (movie) => {
     movieTitle === null || movieTitle === void 0 ? void 0 : movieTitle.addEventListener("click", () => {
         localStorage.setItem(LocalStorageKeys.movieId, movie.imdbID);
         localStorage.setItem(LocalStorageKeys.favList, JSON.stringify(favMovies));
-        window.location.assign("../pages/movie.html");
+        window.location.assign("./pages/movie.html");
     });
     lightIconRegular === null || lightIconRegular === void 0 ? void 0 : lightIconRegular.addEventListener("click", () => {
         // put to fav list
