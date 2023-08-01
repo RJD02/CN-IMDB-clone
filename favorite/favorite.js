@@ -102,7 +102,7 @@ var addFavMovies = function (movie) { return __awaiter(_this, void 0, void 0, fu
                 lightIconSolid_1 === null || lightIconSolid_1 === void 0 ? void 0 : lightIconSolid_1.classList.remove("hidden");
                 movieTitle === null || movieTitle === void 0 ? void 0 : movieTitle.addEventListener("click", function () {
                     localStorage.setItem(ELocalStorageKeys.movieId, movieDetails_1.imdbID);
-                    window.location.assign("CN-IMDB-clone/movie/movie.html");
+                    window.location.assign("../movie/movie.html");
                 });
                 lightIconRegular_1 === null || lightIconRegular_1 === void 0 ? void 0 : lightIconRegular_1.addEventListener("click", function () {
                     favMovieList.push(movieDetails_1.imdbID);

@@ -134,7 +134,7 @@ const addMovies = (movie: OMDBResponseSearchObject) => {
   movieTitle?.addEventListener("click", () => {
     localStorage.setItem(LocalStorageKeys.movieId, movie.imdbID);
     localStorage.setItem(LocalStorageKeys.favList, JSON.stringify(favMovies));
-    window.location.assign("CN-IMDB-cone/movie/movie.html");
+    window.location.assign("./movie/movie.html");
   });
 
   lightIconRegular?.addEventListener("click", () => {
