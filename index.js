@@ -122,7 +122,7 @@ var addMovies = function (movie) {
     movieTitle === null || movieTitle === void 0 ? void 0 : movieTitle.addEventListener("click", function () {
         localStorage.setItem(LocalStorageKeys.movieId, movie.imdbID);
         localStorage.setItem(LocalStorageKeys.favList, JSON.stringify(favMovies));
-        window.location.assign("/movie/movie.html");
+        window.location.assign("./movie/movie.html");
     });
     lightIconRegular === null || lightIconRegular === void 0 ? void 0 : lightIconRegular.addEventListener("click", function () {
         // put to fav list
