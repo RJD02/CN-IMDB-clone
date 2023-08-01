@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Movie:</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script
+      src="https://kit.fontawesome.com/1c84babc0c.js"
+      crossorigin="anonymous"
+    ></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <script src="https://unpkg.com/feather-icons"></script>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="bg-zinc-800 min-h-screen text-slate-100 flex justify-center">
+      <div class="container mt-2 mb-5 mx-2 py-5">
+        <div class="heading flex justify-end border-b-2 pb-4 items-center">
+          <a
+            class="p-2 text-xl rounded-md bg-amber-500 text-white"
+            href="../index.html"
+            >Explore Movies</a
+          >
+          <a
+            class="p-2 text-xl rounded-md bg-white text-black ml-4"
+            href="./favorite.html"
+            >Favorite Movies</a
+          >
+        </div>
+        <div
+          class="loading text-center mt-8 flex items-center justify-center p-2"
+        >
+          <svg
+            class="animate-spin h-5 w-5 mr-3 text-white"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+          >
+            <circle
+              class="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              stroke-width="4"
+            ></circle>
+            <path
+              class="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+            ></path>
+          </svg>
+          Loading...
+        </div>
+        <div class="warning text-center mt-8 invisible">
+          <p></p>
+        </div>
+      </div>
+    </div>
+    <script src="../js/movie.js"></script>
+  </body>
+</html>

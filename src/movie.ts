@@ -178,10 +178,13 @@ const showDetails = async () => {
     addToFavBtn?.addEventListener("click", () => {
       const jsonFavlist = localStorage.getItem("favList");
       if (jsonFavlist == null || jsonFavlist == undefined) return;
-      const favMovieList: string[] = JSON.parse(jsonFavlist);
+      let favMovieList: string[] = JSON.parse(jsonFavlist);
       console.log(favMovieList);
       favMovieList.push(movie.imdbID);
 
+      favMovieList = favMovieList.filter(
+        (it, id) => favMovieList.indexOf(it) === id
+      );
       localStorage.setItem("favList", JSON.stringify(favMovieList));
     });
     loadingDiv?.classList.add("invisible");
