@@ -127,7 +127,7 @@ const addFavMovies = async (movie: string) => {
     lightIconSolid?.classList.remove("hidden");
     movieTitle?.addEventListener("click", () => {
       localStorage.setItem(ELocalStorageKeys.movieId, movieDetails.imdbID);
-      window.location.assign("../movie/movie.html");
+      window.location.assign("CN-IMDB-clone/movie/movie.html");
     });
 
     lightIconRegular?.addEventListener("click", () => {
