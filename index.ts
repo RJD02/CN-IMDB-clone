@@ -3,8 +3,13 @@ const searchTerm = <HTMLInputElement>document.querySelector("#search");
 const omdbURL = "https://www.omdbapi.com/";
 const API_KEY = "9e0f94a9";
 
+enum LocalStorageKeys {
+  favList = "favList",
+  movieId = "movieId",
+}
+
 let favMovies: string[] = [];
-const favListFromLocalStorage = localStorage.getItem("favList");
+const favListFromLocalStorage = localStorage.getItem(LocalStorageKeys.favList);
 if (favListFromLocalStorage != null && favListFromLocalStorage != undefined)
   favMovies = JSON.parse(favListFromLocalStorage);
 let currMovies: OMDBResponseSearchObject[] = [];
@@ -23,9 +28,9 @@ interface OMDBResponse {
   Search: [OMDBResponseSearchObject] | null;
   totalResults: string | null;
 }
-
 window.addEventListener("beforeunload", () => {
-  localStorage.setItem("favList", JSON.stringify(favMovies));
+  searchTerm.value = "";
+  localStorage.setItem(LocalStorageKeys.favList, JSON.stringify(favMovies));
 });
 
 searchTerm.addEventListener("input", async () => {
@@ -77,15 +82,15 @@ const addMovies = (movie: OMDBResponseSearchObject) => {
               <img
                 src=${movie.Poster}
                 alt=""
-                class="group-hover:blur-md"
+                class="group-hover:blur-md mix-blend-normal group-hover:mix-blend-luminosity"
               />
               
                 <i
-                  class="cursor-pointer fa-2xl fa-regular fa-heart text-white absolute left-1/2 top-1/2 invisible group-hover:visible"
+                  class="cursor-pointer fa-2xl fa-regular fa-heart text-white absolute left-[40%] top-1/2 invisible group-hover:visible"
                 ></i>
               
                 <i
-                  class="cursor-pointer fa-2xl fa-solid fa-heart text-white absolute left-1/2 top-1/2 hidden invisible group-hover:visible"
+                  class="cursor-pointer fa-2xl fa-solid fa-heart text-red-500 absolute left-[40%] top-1/2 hidden invisible group-hover:visible"
                 ></i>
               <p
                 class="rated px-1 absolute bottom-2 left-2 bg-green-200 text-black rounded-md text-sm font-mono group-hover:blur-sm"
@@ -127,9 +132,9 @@ const addMovies = (movie: OMDBResponseSearchObject) => {
     lightIconSolid?.classList.remove("hidden");
   }
   movieTitle?.addEventListener("click", () => {
-    localStorage.setItem("movieId", movie.imdbID);
-    localStorage.setItem("favList", JSON.stringify(favMovies));
-    window.location.assign("/moviePage/movie.html");
+    localStorage.setItem(LocalStorageKeys.movieId, movie.imdbID);
+    localStorage.setItem(LocalStorageKeys.favList, JSON.stringify(favMovies));
+    window.location.assign("/movie/movie.html");
   });
 
   lightIconRegular?.addEventListener("click", () => {

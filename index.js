@@ -38,14 +38,20 @@ var _this = this;
 var searchTerm = document.querySelector("#search");
 var omdbURL = "https://www.omdbapi.com/";
 var API_KEY = "9e0f94a9";
+var LocalStorageKeys;
+(function (LocalStorageKeys) {
+    LocalStorageKeys["favList"] = "favList";
+    LocalStorageKeys["movieId"] = "movieId";
+})(LocalStorageKeys || (LocalStorageKeys = {}));
 var favMovies = [];
-var favListFromLocalStorage = localStorage.getItem("favList");
+var favListFromLocalStorage = localStorage.getItem(LocalStorageKeys.favList);
 if (favListFromLocalStorage != null && favListFromLocalStorage != undefined)
     favMovies = JSON.parse(favListFromLocalStorage);
 var currMovies = [];
 var id = 1;
 window.addEventListener("beforeunload", function () {
-    localStorage.setItem("favList", JSON.stringify(favMovies));
+    searchTerm.value = "";
+    localStorage.setItem(LocalStorageKeys.favList, JSON.stringify(favMovies));
 });
 searchTerm.addEventListener("input", function () { return __awaiter(_this, void 0, void 0, function () {
     var searchText;
@@ -101,7 +107,7 @@ var addMovies = function (movie) {
     colDiv.id = "movie-".concat(movie.imdbID);
     colDiv.classList.add("bg-zinc-700");
     colDiv.classList.add("group");
-    colDiv.innerHTML = "\n          \n            <div class=\"max-h-full relative flex flex-1\">\n              <img\n                src=".concat(movie.Poster, "\n                alt=\"\"\n                class=\"group-hover:blur-md\"\n              />\n              \n                <i\n                  class=\"cursor-pointer fa-2xl fa-regular fa-heart text-white absolute left-1/2 top-1/2 invisible group-hover:visible\"\n                ></i>\n              \n                <i\n                  class=\"cursor-pointer fa-2xl fa-solid fa-heart text-white absolute left-1/2 top-1/2 hidden invisible group-hover:visible\"\n                ></i>\n              <p\n                class=\"rated px-1 absolute bottom-2 left-2 bg-green-200 text-black rounded-md text-sm font-mono group-hover:blur-sm\"\n              >\n                PG-13\n              </p>\n            </div>\n            <div\n              class=\"flex flex-col text-slate-200 group-hover:text-white px-1\"\n            >\n              <h3 class=\"mb-1 cursor-pointer text-lg font-semibold text-center\">").concat(movie.Title.length > 15
+    colDiv.innerHTML = "\n          \n            <div class=\"max-h-full relative flex flex-1\">\n              <img\n                src=".concat(movie.Poster, "\n                alt=\"\"\n                class=\"group-hover:blur-md mix-blend-normal group-hover:mix-blend-luminosity\"\n              />\n              \n                <i\n                  class=\"cursor-pointer fa-2xl fa-regular fa-heart text-white absolute left-[40%] top-1/2 invisible group-hover:visible\"\n                ></i>\n              \n                <i\n                  class=\"cursor-pointer fa-2xl fa-solid fa-heart text-red-500 absolute left-[40%] top-1/2 hidden invisible group-hover:visible\"\n                ></i>\n              <p\n                class=\"rated px-1 absolute bottom-2 left-2 bg-green-200 text-black rounded-md text-sm font-mono group-hover:blur-sm\"\n              >\n                PG-13\n              </p>\n            </div>\n            <div\n              class=\"flex flex-col text-slate-200 group-hover:text-white px-1\"\n            >\n              <h3 class=\"mb-1 cursor-pointer text-lg font-semibold text-center\">").concat(movie.Title.length > 15
         ? movie.Title.substring(0, 15) + "..."
         : movie.Title, "</h3>\n              <div class=\"flex justify-evenly items-center\">\n                <span>").concat(movie.Type, "</span>\n                <span\n                  class=\"dot w-1 h-1 rounded bg-stone-400 inline-block mx-1.5 mt-0.5\"\n                ></span>\n                <span>").concat(movie.Year.substring(0, 4), "</span>\n                \n              </div>\n            </div>\n          \n  ").trim();
     gridDiv === null || gridDiv === void 0 ? void 0 : gridDiv.append(colDiv);
@@ -114,9 +120,9 @@ var addMovies = function (movie) {
         lightIconSolid === null || lightIconSolid === void 0 ? void 0 : lightIconSolid.classList.remove("hidden");
     }
     movieTitle === null || movieTitle === void 0 ? void 0 : movieTitle.addEventListener("click", function () {
-        localStorage.setItem("movieId", movie.imdbID);
-        localStorage.setItem("favList", JSON.stringify(favMovies));
-        window.location.assign("/moviePage/movie.html");
+        localStorage.setItem(LocalStorageKeys.movieId, movie.imdbID);
+        localStorage.setItem(LocalStorageKeys.favList, JSON.stringify(favMovies));
+        window.location.assign("/movie/movie.html");
     });
     lightIconRegular === null || lightIconRegular === void 0 ? void 0 : lightIconRegular.addEventListener("click", function () {
         // put to fav list

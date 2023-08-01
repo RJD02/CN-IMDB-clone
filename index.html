@@ -22,7 +22,7 @@
   <body>
     <div class="bg-zinc-800 min-h-screen">
       <div
-        class="container mx-auto text-white text-center py-5 flex justify-center border-b-2"
+        class="container mx-auto text-white text-center py-5 flex justify-center border-b-2 items-center"
       >
         <div class="search-bar border rounded-full bg-zinc-700 px-3">
           <input
@@ -34,9 +34,17 @@
           />
           <i class="fa-solid fa-magnifying-glass"></i>
         </div>
+
+        <a
+          class="p-3 ml-3 rounded-md bg-amber-500 text-white"
+          href="./favorite/favorite.html"
+          >Favorite Movies</a
+        >
       </div>
       <div class="container mx-5 mt-5">
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-5">
+        <div
+          class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-x-4 gap-y-5"
+        >
           <div class="bg-zinc-700 movie group">
             <div class="max-h-full relative flex flex-1">
               <img
@@ -117,7 +125,7 @@
               <img
                 src="https://m.media-amazon.com/images/M/MV5BOGE4NzU1YTAtNzA3Mi00ZTA2LTg2YmYtMDJmMThiMjlkYjg2XkEyXkFqcGdeQXVyNTgzMDMzMTg@._V1_SX300.jpg"
                 alt=""
-                class="group-hover:blur-sm"
+                class="group-hover:blur-sm mix-blend-normal group-hover:mix-blend-luminosity"
               />
               <a class="" href="">
                 <i

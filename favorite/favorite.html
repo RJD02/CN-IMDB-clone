@@ -4,6 +4,37 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Favorite Movies</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script
+      src="https://kit.fontawesome.com/1c84babc0c.js"
+      crossorigin="anonymous"
+    ></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <script src="https://unpkg.com/feather-icons"></script>
+    <link rel="stylesheet" href="style.css" />
   </head>
-  <body></body>
+  <body>
+    <div class="bg-zinc-800 min-h-screen text-slate-100 flex justify-center">
+      <div class="container mx-2 mt-2 py-5">
+        <div class="heading border-b-2 pb-3 flex justify-between items-center">
+          <h1 class="text-4xl inline-block">Favorite Movies</h1>
+          <a
+            href="../index.html"
+            class="p-2 text-xl rounded-md bg-amber-500 text-white"
+            >Explore Movies</a
+          >
+        </div>
+        <div
+          class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-x-4 gap-y-5 mt-5"
+        ></div>
+      </div>
+    </div>
+    <script src="./favorite.js"></script>
+  </body>
 </html>
