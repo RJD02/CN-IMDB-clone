@@ -1,3 +1,4 @@
+// getMovieById returns a OMDBSearchByIdResponse type of object
 const getMovieById = async (movieId: string) => {
   const omdbURL = "https://www.omdbapi.com/";
   const API_KEY = "9e0f94a9";
@@ -46,6 +47,7 @@ interface OMDBSearchByIdResponse {
   Response: string;
 }
 
+// showDetails updates the UI and removes the added UI once user leaves the page
 const showDetails = async () => {
   const movieId = localStorage.getItem("movieId");
   console.log(movieId);
@@ -171,24 +173,30 @@ const showDetails = async () => {
           </div>
         `.trim();
     const containerDiv = document.querySelector(".container");
+    // add to the UI
     containerDiv?.append(movieDetailDiv);
     const loadingDiv = document.querySelector(".loading");
     const addToFavBtn = document.querySelector(".fav-btn");
     console.log(addToFavBtn);
     addToFavBtn?.addEventListener("click", () => {
+      // get favList from local storage
       const jsonFavlist = localStorage.getItem("favList");
       if (jsonFavlist == null || jsonFavlist == undefined) return;
       let favMovieList: string[] = JSON.parse(jsonFavlist);
       console.log(favMovieList);
       favMovieList.push(movie.imdbID);
 
+      // remove duplicates when putting into local storage
       favMovieList = favMovieList.filter(
         (it, id) => favMovieList.indexOf(it) === id
       );
       localStorage.setItem("favList", JSON.stringify(favMovieList));
     });
+
+    // stop showing loading state as data is fetched
     loadingDiv?.classList.add("invisible");
 
+    // make sure the element gets cleared before leaving
     window.addEventListener("beforeunload", () => {
       movieDetailDiv.remove();
     });

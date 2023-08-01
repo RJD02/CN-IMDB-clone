@@ -8,6 +8,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+// getMovieById returns a OMDBSearchByIdResponse type of object
 const getMovieById = (movieId) => __awaiter(void 0, void 0, void 0, function* () {
     const omdbURL = "https://www.omdbapi.com/";
     const API_KEY = "9e0f94a9";
@@ -24,6 +25,7 @@ const getMovieById = (movieId) => __awaiter(void 0, void 0, void 0, function* ()
         console.log(e);
     }
 });
+// showDetails updates the UI and removes the added UI once user leaves the page
 const showDetails = () => __awaiter(void 0, void 0, void 0, function* () {
     const movieId = localStorage.getItem("movieId");
     console.log(movieId);
@@ -140,21 +142,26 @@ const showDetails = () => __awaiter(void 0, void 0, void 0, function* () {
           </div>
         `.trim();
         const containerDiv = document.querySelector(".container");
+        // add to the UI
         containerDiv === null || containerDiv === void 0 ? void 0 : containerDiv.append(movieDetailDiv);
         const loadingDiv = document.querySelector(".loading");
         const addToFavBtn = document.querySelector(".fav-btn");
         console.log(addToFavBtn);
         addToFavBtn === null || addToFavBtn === void 0 ? void 0 : addToFavBtn.addEventListener("click", () => {
+            // get favList from local storage
             const jsonFavlist = localStorage.getItem("favList");
             if (jsonFavlist == null || jsonFavlist == undefined)
                 return;
             let favMovieList = JSON.parse(jsonFavlist);
             console.log(favMovieList);
             favMovieList.push(movie.imdbID);
+            // remove duplicates when putting into local storage
             favMovieList = favMovieList.filter((it, id) => favMovieList.indexOf(it) === id);
             localStorage.setItem("favList", JSON.stringify(favMovieList));
         });
+        // stop showing loading state as data is fetched
         loadingDiv === null || loadingDiv === void 0 ? void 0 : loadingDiv.classList.add("invisible");
+        // make sure the element gets cleared before leaving
         window.addEventListener("beforeunload", () => {
             movieDetailDiv.remove();
         });

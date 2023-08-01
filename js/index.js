@@ -21,7 +21,7 @@ const favListFromLocalStorage = localStorage.getItem(LocalStorageKeys.favList);
 if (favListFromLocalStorage != null && favListFromLocalStorage != undefined)
     favMovies = JSON.parse(favListFromLocalStorage);
 let currMovies = [];
-let id = 1;
+// clear the search value and store the movies marked as favorites
 window.addEventListener("beforeunload", () => {
     searchTerm.value = "";
     localStorage.setItem(LocalStorageKeys.favList, JSON.stringify(favMovies));
@@ -49,18 +49,9 @@ const deleteAllMovies = () => __awaiter(void 0, void 0, void 0, function* () {
 const addMovies = (movie) => {
     // check if this movie of this id already exists
     const doesMovieDivExists = document.querySelector(`#movie-${movie.imdbID}`);
+    // if exists don't add again
     if (doesMovieDivExists)
         return;
-    // const url = new URL(omdbURL)
-    // url.searchParams.set('i', movie.imdbID)
-    // url.searchParams.set('apikey', API_KEY)
-    // try {
-    // const response = await fetch(url);
-    // const data = await response.json();
-    // } catch(e) {
-    //   console.log(e);
-    //   return;
-    // }
     const gridDiv = document.querySelector(".grid");
     const colDiv = document.createElement("div");
     colDiv.classList.add("movie");
@@ -141,16 +132,9 @@ const fetchMovies = (searchText) => __awaiter(void 0, void 0, void 0, function* 
     try {
         const response = yield fetch(url);
         const data = yield response.json();
-        // console.log(data);
         return data.Search;
     }
     catch (e) {
         console.log(e);
     }
 });
-// const fetchData = async () => {
-//   const response = await fetch("apikey=s=hello&type=movie&page=3");
-//   const data = await response.json();
-//   console.log(data);
-// };
-// fetchData();

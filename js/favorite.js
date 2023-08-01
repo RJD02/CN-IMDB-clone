@@ -14,10 +14,12 @@ var ELocalStorageKeys;
     ELocalStorageKeys["favList"] = "favList";
     ELocalStorageKeys["movieId"] = "movieId";
 })(ELocalStorageKeys || (ELocalStorageKeys = {}));
+// load the favList from local storage
 let favMovieList = [];
 const localStorageFavList = localStorage.getItem(ELocalStorageKeys.favList);
 if (localStorageFavList != undefined && localStorageFavList != null)
     favMovieList = JSON.parse(localStorageFavList);
+// getMovie returns the OMDBSearchByIdResponse type of object
 const getMovie = (movieId) => __awaiter(void 0, void 0, void 0, function* () {
     const omdbURL = "https://www.omdbapi.com/";
     const API_KEY = "9e0f94a9";

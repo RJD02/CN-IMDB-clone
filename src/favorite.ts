@@ -3,11 +3,13 @@ enum ELocalStorageKeys {
   favList = "favList",
   movieId = "movieId",
 }
+// load the favList from local storage
 let favMovieList: string[] = [];
 const localStorageFavList = localStorage.getItem(ELocalStorageKeys.favList);
 if (localStorageFavList != undefined && localStorageFavList != null)
   favMovieList = JSON.parse(localStorageFavList);
 
+// getMovie returns the OMDBSearchByIdResponse type of object
 const getMovie = async (movieId: string) => {
   const omdbURL = "https://www.omdbapi.com/";
   const API_KEY = "9e0f94a9";
